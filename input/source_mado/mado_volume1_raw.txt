@@ -1,0 +1,20 @@
+IHE Radiology Technical Framework Supplement – Manifest-based Access to DICOM Objects
+(MADO)
+______________________________________________________________________________
+
+Volume 1 – Profiles
+Domain-specific additions
+None.
+335
+
+___________________________________________________________________________
+Rev. 0.1 – 2025-07-17
+Template Rev. 10.6
+
+14
+
+Copyright © 2025: IHE International, Inc.
+
+DO NOT IMPLEMENT PUBLIC COMMENT VERSIONS
+
+

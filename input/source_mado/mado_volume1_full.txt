@@ -1,0 +1,706 @@
+Integrating the Healthcare Enterprise
+
+IHE Radiology
+Technical Framework Supplement
+
+5
+
+Manifest-based Access to DICOM Objects
+(MADO)
+
+10
+
+For review and comment only.
+DO NOT implement this public comment version.
+15
+
+<For FHIR based profiles, indicate the FHIR release number & the FMM levels of the contents;
+otherwise, delete the two following lines.>
+HL7® FHIR® STU x
+Using Resources at FMM Level n-n
+
+20
+
+Revision 0.4 – Draft in Preparation for Public
+Comment
+Date:
+
+August 18, 2025
+
+Author:
+
+IHE-HL7 Europe Sub-team on imaging manifest
+
+Email:
+25
+
+Please verify you have the most recent version of this document. See here for Trial
+Implementation and Final Text versions and here for Public Comment versions.
+
+Copyright © 2025: IHE International, Inc.
+
+IHE Radiology Technical Framework Supplement – Manifest-based Access to DICOM Objects
+(MADO)
+______________________________________________________________________________
+<Instructions to authors are encapsulated in angled brackets as “< … >” and denoted with
+italicized text. These instructions should be deleted entirely prior to publication.>
+30
+
+35
+
+40
+
+45
+
+<Use of capitalization: Please follow standard English grammar rules-only proper nouns and
+names are upper case. For example, “Modality Actor” is upper case, but “an actor which fulfills
+the role of a modality” is lower case. Do not use upper case to emphasize a word/topic.
+Examples:
+<Note: Before creating a draft supplement, please review the editing conventions, which include
+information such as section, table and diagram numbering and how to use Microsoft Word tools,
+at http://wiki.ihe.net/index.php?title=Writing_Technical_Frameworks_and_Supplements. This
+guidance is especially useful for first time authors.>
+<This supplement template is intended for developing new profiles or making significant
+changes to profiles, such as adding formal options. Simple changes to existing supplements or
+profiles should be made using the Change Proposal (CP) process. See the Technical Framework
+Development section at
+http://wiki.ihe.net/index.php?title=Process#Technical_Framework_Development for more
+guidance on supplements vs. CPs.>
+<All of the sections in this document are required. Sections may not be deleted. The outline
+numbering is intended to be consistent across profiles and across domains, so do not adjust the
+outline numbering. If there is no relevant content for a section, simply state “Section not
+applicable”, but leave the numbering intact. Sub-sections may be added for clarity.>
+<This supplement template includes templates for Volumes 1 (Profiles), 2 (Transactions), 3
+(Content Modules), and 4 (National Extensions).>
+
+50
+
+55
+
+<Volumes 1, 2, and/or 3 are developed together for Public Comment and Trial Implementation
+submission. Volume 4, National Extensions, is typically developed at a later point in time,
+usually at Trial Implementation or later. Templates for all four volumes are included in this
+document for the sake of completeness. If you are beginning a new profile, you are strongly
+discouraged from using National Extensions and should instead focus on optional data sets or
+other alternatives. For more information, see
+http://wiki.ihe.net/index.php?title=National_Extensions_Process.>
+
+___________________________________________________________________________
+Rev. 0.1 – 2025-07-17
+Template Rev. 10.6
+
+2
+
+Copyright © 2025: IHE International, Inc.
+
+DO NOT IMPLEMENT PUBLIC COMMENT VERSIONS
+
+IHE Radiology Technical Framework Supplement – Manifest-based Access to DICOM Objects
+(MADO)
+______________________________________________________________________________
+
+Foreword
+60
+
+65
+
+70
+
+Note: This document is prepared to become a future supplement to the IHE Radiology Technical
+Framework. It anticipates the acceptance of a new profile proposal submitted on July 20th 2025
+to the IHE Radiology 2025-2026 Cycle. It is developed by the IHE-HL7 Europe Working Group
+on Imaging with the goal to use this new profile in the context of the EHDS use case on the
+sharing of imaging studies and related imaging reports.
+This is intended to be a supplement to the IHE Radiology Technical Framework V22.0. Each
+supplement undergoes a process of public comment and trial implementation before being
+incorporated into the volumes of the Technical Frameworks.
+This supplement is published on Month XX, 2025 for Public Comment. Comments are invited
+and can be submitted at https://www.ihe.net/Radiology_Public_Comments. In order to be
+considered in development of the Trial Implementation version of the supplement, comments
+must be received by Month XX, 2025.
+This supplement describes changes to the existing technical framework documents.
+“Boxed” instructions like the sample below indicate to the Volume Editor how to integrate the
+relevant section(s) into the relevant Technical Framework volume.
+Amend section X.X by the following:
+
+75
+
+Where the amendment adds text, make the added text bold underline. Where the amendment
+removes text, make the removed text bold strikethrough. When entire new sections are added,
+introduce with editor’s instructions to “add new text” or similar, which for readability are not
+bolded or underlined.
+
+80
+
+General information about IHE can be found at IHE.
+Information about the IHE <domain name> domain can be found at IHE Domains.
+Information about the organization of IHE Technical Frameworks and Supplements and the
+process used to create them can be found at Profiles and IHE Process
+
+85
+
+The current version of the Radiology Technical Framework can be found at Radiology Technical
+Framework.
+<Comments may be submitted on IHE Technical Framework templates any time at
+http://ihe.net/Templates_Public_Comments. Please enter comments/issues as soon as they are
+found. Do not wait until a future review cycle is announced.>
+
+90
+
+___________________________________________________________________________
+Rev. 0.1 – 2025-07-17
+Template Rev. 10.6
+
+3
+
+Copyright © 2025: IHE International, Inc.
+
+DO NOT IMPLEMENT PUBLIC COMMENT VERSIONS
+
+IHE Radiology Technical Framework Supplement – Manifest-based Access to DICOM Objects
+(MADO)
+______________________________________________________________________________
+Temporary Note: In term of structure of the profile here the skeleton:
+1. The volume 1 is the profile overview in term of Actor/Transactions, the overall use case
+and associated scenarios. Volume 1 will also state the required and optional transactions,
+as well as the required/optional grouping. For the Actor/Transactions, I recommend:
+95
+
+a. create a “document creator Actor“ that produces the Imaging Manifest with a
+“convey manifest content” transaction to a “document consumer Actor”. IHE in
+its profiles that define only content, has a “convey content transactions” (not sure
+this is the official name, but you should get the concept).
+b. The “convey manifest transaction” should define two options:
+
+100
+
+105
+
+i.
+
+A DICOM KOS Based Manifest option that references the Section A of
+the volume 2 manifest content (see below)
+
+ii.
+
+A FHIR Based Manifest option that references the Section B of the
+volume 3 manifest content (see below)
+
+c. The Imaging Document Consumer Actor that will issue the WADO Retrieve
+Transaction to the Imaging Document Source Actor, will be required to be
+grouped with the Document Consumer Actor.
+2. Volume 2 Chapter on the WADO-RS Retrieve Transaction.
+
+110
+
+3. A volume 3 Chapter on the Manifest content that includes a section A on the DICOM
+KOS based Manifest, and one section B on the FHIR based Manifest. The section C (for
+information) would include the mapping of A to B and B from A.
+
+___________________________________________________________________________
+Rev. 0.1 – 2025-07-17
+Template Rev. 10.6
+
+4
+
+Copyright © 2025: IHE International, Inc.
+
+DO NOT IMPLEMENT PUBLIC COMMENT VERSIONS
+
+IHE Radiology Technical Framework Supplement – Manifest-based Access to DICOM Objects
+(MADO)
+______________________________________________________________________________
+115
+
+120
+
+125
+
+130
+
+135
+
+140
+
+145
+
+150
+
+155
+
+CONTENTS
+Introduction to this Supplement ...................................................................................................... 9
+Open Issues and Questions ...................................................................................................... 10
+Closed Issues ............................................................................................................................ 10
+IHE Technical Frameworks General Introduction ........................................................................ 11
+9 Copyright Licenses................................................................................................................... 11
+10 Trademark ................................................................................................................................ 11
+IHE Technical Frameworks General Introduction Appendices .................................................... 12
+Appendix A – Actors .................................................................................................................... 12
+Appendix B – Transactions ........................................................................................................... 12
+Appendix D – Glossary ................................................................................................................. 13
+Volume 1 – Profiles ...................................................................................................................... 14
+Domain-specific additions ....................................................................................................... 14
+59 Manifest-based Access to DICOM Objects (MADO) Profile ................................................. 15
+59.1 MADO Actors, Transactions, and Content Modules ....................................................... 15
+X.1.1 Actor Descriptions and Actor Profile Requirements ................................................. 17
+X.1.1.1 Content Creator.................................................................................................. 17
+X.1.1.2 Content Consumer ............................................................................................. 17
+X.1.1.3 Imaging Document Consumer ........................................................................... 17
+X.1.1.4 Imaging Document Source ................................................................................ 18
+X.2 MADO Actor Options ....................................................................................................... 18
+X.2.1 <Option Name> ......................................................................................................... 19
+X.3 MADO Required Actor Groupings ................................................................................... 19
+X.4 MADO Overview .............................................................................................................. 20
+X.4.1 Concepts .................................................................................................................... 20
+X.4.1.1 Intra-community sharing infrastructure ............................................................. 20
+X.4.1.2 Imaging Reports ................................................................................................ 21
+X.4.1.3 DICOMweb Study Service Retrieve transaction URI ....................................... 21
+X.4.2 Use Cases .................................................................................................................. 21
+X.4.2.1 Use Case #1: DICOM Instance Retrieval .......................................................... 22
+X.4.2.1.1 Instance Retrieval Use Case Description ................................................... 22
+X.4.2.1.2 Instance Retrieval Process Flow ................................................................ 23
+X.4.1.2.1 Pre-conditions ....................................................................................... 24
+X.4.1.2.2 Main Flow ............................................................................................. 24
+X.4.1.2.3 Post-conditions ...................................................................................... 24
+X.5 MADO Security Considerations ....................................................................................... 24
+X.6 MADO Cross Profile Considerations ................................................................................ 25
+Appendices to Volume 1 ............................................................................................................... 26
+Appendix A – <Appendix Title> .................................................................................................. 27
+A.1 <Title> ............................................................................................................................... 27
+A.1.1 <Title> ....................................................................................................................... 27
+___________________________________________________________________________
+Rev. 0.1 – 2025-07-17
+Template Rev. 10.6
+
+5
+
+Copyright © 2025: IHE International, Inc.
+
+DO NOT IMPLEMENT PUBLIC COMMENT VERSIONS
+
+IHE Radiology Technical Framework Supplement – Manifest-based Access to DICOM Objects
+(MADO)
+______________________________________________________________________________
+
+160
+
+165
+
+170
+
+175
+
+180
+
+185
+
+190
+
+195
+
+Volume 2 – Transactions .............................................................................................................. 28
+3.1xy WADO-RS Get Instances [RAD-1xy] ........................................................................... 28
+3.1xy.1 Scope ...................................................................................................................... 28
+3.1xy.2 Actor Roles ............................................................................................................. 28
+3.1xy.3 Referenced Standards ............................................................................................. 28
+3.1xy.4 Messages ................................................................................................................ 29
+3.1xy.4.1 Get Instances Request Message...................................................................... 29
+3.1xy.4.1.1 Trigger Events ........................................................................................ 29
+3.1xy.4.1.2 Message Semantics ................................................................................. 30
+3.1xy.4.1.2.1 Example of a Get Instances Request message ................................ 30
+3.1xy.4.1.3 Expected Actions .................................................................................... 31
+3.1xy.4.2 Get Instances Response Message ................................................................... 31
+3.1xy.4.2.1 Trigger Events ........................................................................................ 31
+3.1xy.4.2.2 Message Semantics ................................................................................. 31
+3.1xy.4.2.3 Expected Actions .................................................................................... 31
+3.1xy.4.3 Get Rendered Instances Request Message ..................................................... 31
+3.1xy.4.3.1 Trigger Events ........................................................................................ 32
+3.1xy.4.3.2 Message Semantics ................................................................................. 32
+3.1xy.4.3.2.1 Example of a Get Instances Request message ................................ 32
+3.1xy.4.3.3 Expected Actions .................................................................................... 33
+3.1xy.4.4 Get Rendered Instances Response Message ................................................... 33
+3.1xy.4.4.1 Trigger Events ........................................................................................ 33
+3.1xy.4.4.2 Message Semantics ................................................................................. 33
+3.1xy.4.4.3 Expected Actions .................................................................................... 33
+3.1xy.5 Protocol Requirements ........................................................................................... 33
+3.1xy.6 Security Considerations.......................................................................................... 34
+3.1xy.6.1 Security Audit Considerations ........................................................................ 34
+3.1xy.6.(z) <Actor> Specific Security Considerations ................................................... 34
+Appendices to Volume 2 ............................................................................................................... 35
+Volume 3 – Content Modules ....................................................................................................... 36
+5 IHE Namespaces, Concept Domains and Vocabularies ............................................................ 37
+5.1 IHE MADO Namespaces ................................................................................................... 37
+5.2 IHE MADO Concept Domains .......................................................................................... 37
+5.3 IHE MADO Format Codes and Vocabularies ................................................................... 38
+5.3.1 IHE Format Codes ...................................................................................................... 38
+5.3.2 IHEActCode Vocabulary ........................................................................................... 38
+5.3.3 IHERoleCode Vocabulary .......................................................................................... 39
+5.3.4 Imaging Study Manifest Search Metadata ................................................................. 39
+7 MADO DICOM Content Definitions ........................................................................................ 40
+7.1 Conventions ...................................................................................................................... 40
+7.1.1 DICOM Structured Report ........................................................................................ 41
+7.1.2 Display Requirements ................................................................................................ 41
+___________________________________________________________________________
+Rev. 0.1 – 2025-07-17
+Template Rev. 10.6
+
+6
+
+Copyright © 2025: IHE International, Inc.
+
+DO NOT IMPLEMENT PUBLIC COMMENT VERSIONS
+
+IHE Radiology Technical Framework Supplement – Manifest-based Access to DICOM Objects
+(MADO)
+______________________________________________________________________________
+
+200
+
+205
+
+210
+
+215
+
+220
+
+225
+
+230
+
+235
+
+240
+
+7.2 General Definitions ........................................................................................................... 41
+7.3 IOD Definitions ................................................................................................................ 42
+7.3.1 Key Object Selection Document IODs ...................................................................... 42
+7.3.1.1 Key Object Selection Document IOD ................................................................ 42
+7.3.1.1.1 Key Object Selection Document IOD <Use Case Context> .................... 42
+7.3.1.1.1.1 Referenced Standards ........................................................................ 42
+7.3.1.1.1.2 IOD Definition ................................................................................... 42
+7.4 Module Definitions ........................................................................................................... 43
+7.4.1 Key Object Selection Document Modules ................................................................ 43
+7.4.1.1 Patient Module.................................................................................................... 43
+7.4.1.1.1 Patient Module <Use Case Context> ........................................................ 43
+7.4.1.1.1.1 Referenced Standards ........................................................................ 43
+7.4.1.1.1.2 Module Definition ............................................................................. 43
+7.4.1.2 General Study Module ........................................................................................ 46
+7.4.1.2.1 General Study Module <Use Case Context> ............................................ 46
+7.4.1.2.1.1 Referenced Standards ........................................................................ 46
+7.4.1.2.1.2 Module Definition ............................................................................. 46
+7.4.1.3 Key Object Document Series Module ................................................................ 47
+7.4.1.3.1 Key Object Document Series Module <Use Case Context> .................... 47
+7.4.1.3.1.1 Referenced Standards ........................................................................ 47
+7.4.1.3.1.2 Module Definition ............................................................................. 47
+7.4.1.4 General Equipment Module ............................................................................... 48
+7.4.1.4.1 General Equipment Module <Use Case Context> .................................... 48
+7.4.1.4.1.1 Referenced Standards ........................................................................ 48
+7.4.1.4.1.2 Module Definition ............................................................................. 49
+7.4.1.5 Key Object Document Module ........................................................................... 50
+7.4.1.5.1 Key Object Document Module <Use Case Context> ............................... 50
+7.4.1.5.1.1 Referenced Standards ........................................................................ 50
+7.4.1.5.1.2 Module Definition ............................................................................. 50
+7.4.1.6 SR Document Content Module .......................................................................... 56
+7.4.1.6.1 SR Document Module <Use Case Context> ............................................ 56
+7.4.1.6.1.1 Referenced Standards ........................................................................ 56
+7.4.1.6.1.2 Module Definition ............................................................................. 57
+7.4.1.7 SOP Common Module ....................................................................................... 58
+7.4.1.7.1 SOP Common Module <Use Case Context> ............................................ 58
+7.4.1.7.1.1 Referenced Standards ........................................................................ 58
+7.4.1.7.1.2 Module Definition ............................................................................. 59
+8 MADO HL7 FHIR Content Definitions .................................................................................... 60
+9 MADO DICOM – FHIR Manifest Mapping Specification ....................................................... 61
+Appendices to Volume 3 ............................................................................................................... 62
+Appendix A – <Appendix Title> .................................................................................................. 63
+A.1 <Title> ............................................................................................................................... 63
+___________________________________________________________________________
+Rev. 0.1 – 2025-07-17
+Template Rev. 10.6
+
+7
+
+Copyright © 2025: IHE International, Inc.
+
+DO NOT IMPLEMENT PUBLIC COMMENT VERSIONS
+
+IHE Radiology Technical Framework Supplement – Manifest-based Access to DICOM Objects
+(MADO)
+______________________________________________________________________________
+A.1.1 <Title> ....................................................................................................................... 63
+
+___________________________________________________________________________
+Rev. 0.1 – 2025-07-17
+Template Rev. 10.6
+
+8
+
+Copyright © 2025: IHE International, Inc.
+
+DO NOT IMPLEMENT PUBLIC COMMENT VERSIONS
+
+IHE Radiology Technical Framework Supplement – Manifest-based Access to DICOM Objects
+(MADO)
+______________________________________________________________________________
+
+Introduction to this Supplement
+<If this is a FHIR based profile, include the following boxed in text and complete the table
+within; otherwise, delete the text in its entirety.>
+245
+
+250
+
+Whenever possible, IHE profiles are based on established and stable underlying standards.
+However, if an IHE domain determines that an emerging standard has high likelihood of industry
+adoption, and the standard offers significant benefits for the use cases it is attempting to address,
+the domain may develop IHE profiles based on such a standard. During Trial Implementation,
+the IHE domain will update and republish the IHE profile as the underlying standard evolves.
+Product implementations and site deployments may need to be updated in order for them to
+remain interoperable and conformant with an updated IHE profile.
+
+255
+
+This <profile acronym> Profile (or This Technical Framework Supplement) incorporates content
+from Release 4 of the HL7® FHIR® specification. HL7 describes FHIR Change Management and
+Versioning at https://www.hl7.org/fhir/versions.html.
+HL7 provides a rating of the maturity of FHIR content based on the FHIR Maturity Model
+(FMM): level 0 (draft) through N (Normative). See http://hl7.org/fhir/versions.html#maturity.
+The FMM levels for FHIR content used in this profile are:
+FHIR Content
+
+FMM Level
+
+(Resources, ValueSets, etc.
+
+<e.g., Communication
+
+2>
+
+260
+<Provide a brief overview of the volumes/sections of the Technical Framework that get changed/
+added by this supplement. Provide 200 words or less describing this supplement.>
+265
+
+This new work item proposal aims to define a new IHE profile to address the access to
+DICOM Instances based on an imaging study manifest.
+The need for this profile was identified as part of the sharing of imaging studies and related
+reports as required under the EHDS Regulation (see discussion below).
+
+270
+
+Such an access was initially introduced by a part of the XDS-I.b profile almost 20 years ago.
+The XDS-I profile has introduced the concept of a manifest, a document that summarizes the
+content of an imaging study, its structure with the identification and the location where
+___________________________________________________________________________
+Rev. 0.1 – 2025-07-17
+Template Rev. 10.6
+
+9
+
+Copyright © 2025: IHE International, Inc.
+
+DO NOT IMPLEMENT PUBLIC COMMENT VERSIONS
+
+IHE Radiology Technical Framework Supplement – Manifest-based Access to DICOM Objects
+(MADO)
+______________________________________________________________________________
+various instances that belong to the study may be retrieved. The XDS-I.b profile leverages
+the XDS profile to support the discovery of such manifest documents through a document
+registry query and its retrieval from a document repository.
+275
+
+280
+
+285
+
+With the introduction of a FHIR based document sharing with the MHDS Profile, there is a
+demand to combine MHDS along with a profile that covers the access to DICOM Instances
+leveraging the information contained in shared imaging study manifests.
+The need for such a new profile that addresses the access to DICOM Instances based on an
+imaging study manifest could be combined either with XDS or MHDS (or MHD), or some
+proprietary document sharing scheme. Such flexibility ensures a common and more effective
+way to access the DICOM Objects through a solid profiling of WADO-RS and the use of a
+more robust Imaging Study Manifest supporting two complementary encodings based on the
+DICOM KOS IOD or FHIR Imaging Study resource, as well as profiling in a more precise
+way existing attributes and new attributes, such as those necessary to improve the access to
+key images.
+
+Open Issues and Questions
+#
+1.
+
+Issue / Answer
+Q:
+TC:
+A:
+
+Closed Issues
+#
+1.
+
+Issue / Answer
+Q:
+TC:
+A:
+
+___________________________________________________________________________
+Rev. 0.1 – 2025-07-17
+Template Rev. 10.6
+
+10
+
+Copyright © 2025: IHE International, Inc.
+
+DO NOT IMPLEMENT PUBLIC COMMENT VERSIONS
+
+IHE Radiology Technical Framework Supplement – Manifest-based Access to DICOM Objects
+(MADO)
+______________________________________________________________________________
+290
+
+IHE Technical Frameworks General Introduction
+The IHE Technical Frameworks General Introduction is shared by all of the IHE domain
+technical frameworks. Each technical framework volume contains links to this document where
+appropriate.
+
+9 Copyright Licenses
+295
+
+IHE technical documents refer to, and make use of, a number of standards developed and
+published by several standards development organizations. Please refer to the IHE Technical
+Frameworks General Introduction, Section 9 - Copyright Licenses for copyright license
+information for frequently referenced base standards. Information pertaining to the use of IHE
+International copyrighted materials is also available there.
+
+300
+
+10 Trademark
+IHE® and the IHE logo are trademarks of the Healthcare Information Management Systems
+Society in the United States and trademarks of IHE Europe in the European Community. Please
+refer to the IHE Technical Frameworks General Introduction, Section 10 - Trademark for
+information on their use.
+
+___________________________________________________________________________
+Rev. 0.1 – 2025-07-17
+Template Rev. 10.6
+
+11
+
+Copyright © 2025: IHE International, Inc.
+
+DO NOT IMPLEMENT PUBLIC COMMENT VERSIONS
+
+IHE Radiology Technical Framework Supplement – Manifest-based Access to DICOM Objects
+(MADO)
+______________________________________________________________________________
+305
+
+IHE Technical Frameworks General Introduction Appendices
+The IHE Technical Framework General Introduction Appendices are components shared by all
+of the IHE domain technical frameworks. Each technical framework volume contains links to
+these documents where appropriate.
+
+310
+
+Update the following appendices to the General Introduction as indicated below. Note that these
+are not appendices to this domain’s Technical Framework (TF-1, TF-2, TF-3 or TF-4) but
+rather, they are appendices to the IHE Technical Frameworks General Introduction located
+here.
+
+315
+
+Appendix A – Actors
+Add the following new or modified actors to the IHE Technical Frameworks General
+Introduction Appendix A:
+New (or modified) Actor
+Name
+
+Description
+If this is a modified actor description, add the original description and use bold
+underline to indicate where the amendment adds text and bold strikethrough where
+the amendment removes text
+
+320
+The table below lists existing actors that are utilized in this profile.
+Complete List of Existing Actors Utilized in this Profile
+Existing Actor Name
+
+Definition
+
+Content Creator
+
+The Content Creator Actor creates content and transmits to a Content Consumer.
+
+Content Consumer
+
+The Content Consumer Actor views, imports, or performs other processing of content
+created by a Content Creator Actor.
+
+Imaging Document Consumer
+
+A system that makes use of imaging data.
+
+Imaging Document Source
+
+Publishes imaging data and makes it available for retrieval.
+
+Appendix B – Transactions
+325
+___________________________________________________________________________
+Rev. 0.1 – 2025-07-17
+Template Rev. 10.6
+
+12
+
+Copyright © 2025: IHE International, Inc.
+
+DO NOT IMPLEMENT PUBLIC COMMENT VERSIONS
+
+IHE Radiology Technical Framework Supplement – Manifest-based Access to DICOM Objects
+(MADO)
+______________________________________________________________________________
+New (or modified) Transaction Name and
+Number
+
+Definition
+
+WADO-RS Get Instances [RAD-1xy]
+
+Get DICOM Instances from the Imaging Document Source at a
+Study, Series or Instance level.
+
+Appendix D – Glossary
+330
+No new or modified glossary terms.
+
+___________________________________________________________________________
+Rev. 0.1 – 2025-07-17
+Template Rev. 10.6
+
+13
+
+Copyright © 2025: IHE International, Inc.
+
+DO NOT IMPLEMENT PUBLIC COMMENT VERSIONS
+
+IHE Radiology Technical Framework Supplement – Manifest-based Access to DICOM Objects
+(MADO)
+______________________________________________________________________________
+
+Volume 1 – Profiles
+Domain-specific additions
+None.
+335
+
+___________________________________________________________________________
+Rev. 0.1 – 2025-07-17
+Template Rev. 10.6
+
+14
+
+Copyright © 2025: IHE International, Inc.
+
+DO NOT IMPLEMENT PUBLIC COMMENT VERSIONS
+
+
